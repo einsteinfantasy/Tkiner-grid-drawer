@@ -95,9 +95,26 @@ class GridDrawer(tk.Tk):
             column = int(event.x // self.column_width)
             tooltip_text = f"Row={row + 1}, Column={column + 1}"
             self.tooltip.config(text=tooltip_text)
-            self.tooltip.place(x=event.x + 20, y=event.y + 20)
+
+            # Calculate tooltip position to prevent it from going out of the window
+            tooltip_x = event.x + 20
+            tooltip_y = event.y + 20
+        
+            # Get the window width and height
+            window_width = self.winfo_width()
+            window_height = self.winfo_height()
+        
+            # Adjust the tooltip position if it goes beyond the right edge
+            if tooltip_x + self.tooltip.winfo_reqwidth() > window_width:
+                tooltip_x = event.x - 20 - self.tooltip.winfo_reqwidth()
+        
+            # Adjust the tooltip position if it goes beyond the bottom edge
+            if tooltip_y + self.tooltip.winfo_reqheight() > window_height:
+                tooltip_y = event.y - 20 - self.tooltip.winfo_reqheight()
+        
+            self.tooltip.place(x=tooltip_x, y=tooltip_y)
         else:
-            self.tooltip.place_forget() 
+            self.tooltip.place_forget()
 
 if __name__ == "__main__":
     app = GridDrawer()
