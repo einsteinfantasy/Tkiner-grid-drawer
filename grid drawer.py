@@ -5,7 +5,11 @@ class GridDrawer(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Dynamic Grid Drawer")
-        self.geometry("1280x720")
+
+        # Set the initial canvas size
+        self.canvas_width = 1280
+        self.canvas_height = 720
+        self.set_window_size(self.canvas_width, self.canvas_height)
 
         self.row_var = tk.StringVar()
         self.column_var = tk.StringVar()
@@ -14,7 +18,12 @@ class GridDrawer(tk.Tk):
         self.background_image = None
 
         self.create_widgets()
-
+        
+    def set_window_size(self, width, height):
+        # Update the window size based on the canvas size
+        self.geometry(f"{width}x{height + 50}")  # 50 pixels approximately for the control frame
+        self.resizable(False, False)
+        
     def create_widgets(self):
         control_frame = tk.Frame(self)
         control_frame.pack(side=tk.TOP, fill=tk.X)
@@ -59,14 +68,14 @@ class GridDrawer(tk.Tk):
             self.rows = self.columns = None  
 
     def draw_grid(self, rows, columns):
-        # Delete only the grid lines with the 'grid_line' tag
+        # Clear the grid lines before redrawing
         self.canvas.delete("grid_line")  
 
+        # Get the current width and height of the canvas
         width = self.canvas.winfo_width()
         height = self.canvas.winfo_height()
 
-        self.canvas.update_idletasks()
-
+        # Calculate the size of each grid cell
         self.row_height = height / rows
         self.column_width = width / columns
 
